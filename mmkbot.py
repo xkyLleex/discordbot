@@ -1,19 +1,29 @@
 import discord
 from discord.ext import commands
 
-TOKEN = "NTY0Njc1MTgzNDU0MTkxNjI2.XKsHSQ.tMMYeizUZaqySI9eCochSeahb3M"
+TOKEN = "?????????????????????????????????????????????????????????????????????????????????????????????????????"
 
 client = commands.Bot(command_prefix = "//")
 client.remove_command("help")
 
 @client.event
 async def on_ready():
-    print("Bot is ready")
+	await client.change_presence(game=discord.Game(name="神奇指令"))
+	print("Bot is ready")
 
 @client.event
 async def on_message(message):
 	author = message.author
 	content = message.content
+	if message.content.startswith("kevin"):
+		await client.delete_message(message)
+		await client.send_message(message.channel,"Someone say => Kevin is Gay.")
+	elif message.content.startswith("kyllee"):
+		await client.delete_message(message)
+		await client.send_message(message.channel,"{} say => kyllee is Handsome guy.".format(author))
+	elif message.content.startswith("teemo"):
+		await client.delete_message(message)
+		await client.send_message(message.channel,"Someone say => Teemo_z is keykey(kiki).")
 	print("{} : {}".format(author,content))
 	await client.process_commands(message)
 
@@ -38,17 +48,18 @@ async def join(ctx):
 async def leave(ctx):
 	server = ctx.message.server
 	voice_client = client.voice_client_in(server)
-	await client.join_voice_channel(channel)
-		
+	await voice_client.disconnect()
+	
 @client.command()
 async def help():
 	embed = discord.Embed(
-		description = "程式碼：https://github.com/xkyLleex/redhat-python",
+		description = "程式碼：https://github.com/xkyLleex/xxx",
 		colour = discord.Colour.green()
 	)
 	embed.set_author(name="MMKbot")
 	embed.add_field(name="//help",value="叫出MMKbot的資訊",inline=False)
 	embed.add_field(name="//clear [整數]",value="清除訊息(整數只能輸入1-99)",inline=False)
+	embed.add_field(name="?彩蛋?",value="爽爽der",inline=False)
 	await client.say(embed=embed)
 
 client.run(TOKEN)
