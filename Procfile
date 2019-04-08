@@ -1,1 +1,1 @@
-worker: python3 mmkbot.py
+worker: python mmkbot.py
