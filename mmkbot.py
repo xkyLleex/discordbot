@@ -1,4 +1,4 @@
-import discord , datetime
+import discord , datetime , pytz
 from discord.ext import commands
 
 TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
@@ -56,7 +56,6 @@ async def weather(ctx,*args):
                     try:
                         delaytime=int(args[1])+10
                     except:
-                        delaytime=10
                         await client.say("請輸入的文字並非數字，將以原始模式跑圖！")
                     else:
                         if 120 < delaytime or delaytime < 0:
@@ -65,7 +64,8 @@ async def weather(ctx,*args):
             except:
                 delaytime=10
             finally:
-                nowtimes = datetime.datetime.now() - datetime.timedelta(minutes=delaytime)
+                twtime = pytz.timezone(pytz.country_timezones('tw')[0])
+                nowtimes = datetime.datetime.now(twtime) - datetime.timedelta(minutes=delaytime)
             minute = int(nowtimes.strftime("%M"))
             if minute >= 10:
                 await client.say("如果沒有圖就表示還未產生，把時間往前調就行(預設已往前調10Min)\n往前調 x 分鐘指令=>//weather rader x")
@@ -80,8 +80,9 @@ async def weather(ctx,*args):
 		
 @client.command()
 async def nowtime():
-    week = datetime.datetime.now().strftime("%w")
-    await client.say("{} {}{}".format(datetime.datetime.now(),"星期",week))
+    twtime = pytz.timezone(pytz.country_timezones('tw')[0])
+    times = datetime.datetime.now(twtime)
+    await client.say("{} {}{}".format(times,"星期",times.strftime("%w")))
 		
 @client.command()
 async def help():
