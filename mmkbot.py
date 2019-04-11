@@ -1,7 +1,7 @@
-import discord
+import discord , datetime
 from discord.ext import commands
 
-TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 client = commands.Bot(command_prefix = "//")
 client.remove_command("help")
@@ -16,6 +16,8 @@ async def on_message(message):
 	author = message.author
 	content = message.content
 	if message.content.startswith("kevin gay"):
+		await client.delete_message(message)
+		await client.send_message(message.channel,"Kevin cry")
 		await client.send_message(message.channel,"https://tenor.com/view/blue-cry-sad-bad-day-gif-5337197")
 	elif message.content.startswith("kyllee"):
 		await client.delete_message(message)
@@ -28,7 +30,7 @@ async def on_message(message):
 		await client.send_message(message.channel,"Someone say => Kevin is Gay.")
 	print("{} : {}".format(author,content))
 	await client.process_commands(message)
-
+    
 @client.command(pass_context=True)
 async def clear(ctx,amount=100):
 	if ctx.message.author.server_permissions.administrator:
@@ -45,15 +47,41 @@ async def clear(ctx,amount=100):
 		await client.say("你沒有使用權限")
 
 @client.command(pass_context=True)
-async def join(ctx):
-	channel = ctx.message.author.voice.voice_channel
-	await client.join_voice_channel(channel)
+async def weather(ctx,*args):
+    try:
+        if args[0] == "radar":
+            delaytime=0
+            try:
+                if args[1] != "":
+                    try:
+                        delaytime=int(args[1])+10
+                    except:
+                        delaytime=10
+                        await client.say("請輸入的文字並非數字，將以原始模式跑圖！")
+                    else:
+                        if 120 < delaytime or delaytime < 0:
+                            delaytime=10
+                            await client.say("數字加10後只能介於0-120之間，將以原始模式跑圖！")
+            except:
+                delaytime=10
+            finally:
+                nowtimes = datetime.datetime.now() - datetime.timedelta(minutes=delaytime)
+            minute = int(nowtimes.strftime("%M"))
+            if minute >= 10:
+                await client.say("如果沒有圖就表示還未產生，把時間往前調就行(預設已往前調10Min)\n往前調 x 分鐘指令=>//weather rader x")
+                await client.say("https://www.cwb.gov.tw/V7/observe/radar/Data/HD_Radar/CV1_3600_{}{}.png"
+                                 .format(nowtimes.strftime("%Y%m%d%H"),int(minute/10)*10))
+            else:
+                await client.say("如果沒有圖就表示還未產生，把時間往前調就行(預設已往前調10Min)\n往前調 x 分鐘指令=>//weather rader x")
+                await client.say("https://www.cwb.gov.tw/V7/observe/radar/Data/HD_Radar/CV1_3600_{}.png"
+                                 .format(nowtimes.strftime("%Y%m%d%H00")))
+    except:
+        await client.say("請輸入一個值")
 		
-@client.command(pass_context=True)
-async def leave(ctx):
-	server = ctx.message.server
-	voice_client = client.voice_client_in(server)
-	await voice_client.disconnect()
+@client.command()
+async def nowtime():
+    week = datetime.datetime.now().strftime("%w")
+    await client.say("{} {}{}".format(datetime.datetime.now(),"星期",week))
 		
 @client.command()
 async def help():
@@ -64,6 +92,8 @@ async def help():
 	embed.set_author(name="MMKbot")
 	embed.add_field(name="//help",value="叫出MMKbot的資訊",inline=False)
 	embed.add_field(name="//clear [整數]",value="清除訊息(整數只能輸入1-99)",inline=False)
+	embed.add_field(name="//nowtime",value="顯示現在時間",inline=False)
+	embed.add_field(name="//weather [功能]",value="顯示:earth_asia:天氣狀況，[功能]有:\nradar=>臺灣雷達回波圖",inline=False)
 	embed.add_field(name="?彩蛋?",value="自行尋找吧",inline=False)
 	await client.say(embed=embed)
 
