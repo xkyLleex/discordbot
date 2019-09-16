@@ -8,7 +8,7 @@ client.remove_command("help")
 
 @client.event
 async def on_ready():
-	await client.change_presence(game=discord.Game(name="神奇指令"))
+	await client.change_presence(game=discord.Game(name="//help",type=3))
 	print("Bot is ready")
 
 @client.event
