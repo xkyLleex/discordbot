@@ -75,6 +75,9 @@ async def weather(ctx,*args):
                 await client.say("如果沒有圖就表示還未產生，把時間往前調就行(預設已往前調10Min)\n往前調 x 分鐘指令=>//weather rader x")
                 await client.say("https://www.cwb.gov.tw/V7/observe/radar/Data/HD_Radar/CV1_3600_{}.png"
                                  .format(nowtimes.strftime("%Y%m%d%H00")))
+        if args[0] == "analysis":
+            await client.say("Taiwan:UTC+8")
+            await client.say("https://www.cwb.gov.tw/Data/fcst_img/I04.jpg")
     except:
         await client.say("請輸入一個值")
 		
